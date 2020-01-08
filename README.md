@@ -30,6 +30,7 @@ pip install pygame
 
 ## Art
 The famous painting "Kaplumbağa Terbiyecisi" (Turtle Trainer) of Mr. Osman Hamdi was used to add visual power to the project.
+
 | Kaplumbağa Terbiyecisi (1907) | My Creation of Art |
 | ------------ | ------------ |
 | ![](https://github.com/bilalguvenc/SnakeAI/blob/master/images/poster_original.jpg?raw=true) | ![](https://github.com/bilalguvenc/SnakeAI/blob/master/images/snakeai_poster.png?raw=true) |
