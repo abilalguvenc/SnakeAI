@@ -30,21 +30,7 @@ class ReplayBuffer():
         self.action_memory = np.zeros((self.mem_size, n_actions), dtype = dtype)
         self.reward_memory = np.zeros((self.mem_size))
         self.terminal_memory = np.zeros(self.mem_size, dtype=np.float32)
-
-    def saveStateMemory(self):        
-        f = open("memory_header.txt","w")
-        f.write(str(self.mem_size)+"\n")
-        f.write(str(self.mem_cntr)+"\n")
-        f.write(str(self.input_shape)+"\n")
-        f.write(str(self.discrete)+"\n")
-        f.close()
-        np.savetxt(fname="state.txt",X=self.state_memory,fmt="%i")
-        np.savetxt(fname="state_new.txt",X=self.new_state_memory,fmt="%i")
-        np.savetxt(fname="action.txt",X=self.action_memory,fmt="%i")
-        np.savetxt(fname="reward.txt",X=self.reward_memory,fmt="%i")
-        np.savetxt(fname="terminal.txt",X=self.terminal_memory)
-                    
-
+               
     def store_transition(self,state,action,reward,state_,done):
         index = self.mem_cntr % self.mem_size
         self.state_memory[index] = state
@@ -130,36 +116,6 @@ class Agent(object):
         
         self.epsilon = self.epsilon*self.epsilon_dec if self.epsilon > \
                        self.epsilon_min else self.epsilon_min
-    
-    def save_model(self):
-        self.q_eval.save(self.model_file)
-        self.memory.saveStateMemory()
-        
-    def load_model(self):
-        self.q_eval = load_model(self.model_file)
-        self.memory = loadStateMemory()
-
-def loadStateMemory():
-    f = open("memory_header.txt","r")
-    satirlar = f.readlines()
-    f.close()
-    size = int(satirlar[0])
-    cntr = int(satirlar[1])
-    in_shape = int(satirlar[2])
-    if "True" in satirlar[3]:
-        dc = True
-    else:
-        dc = False
-    memory = ReplayBuffer(max_size = size,input_shape = in_shape,n_actions=3,discrete = dc)
-    memory.state_memory = np.loadtxt(fname="state.txt",dtype='int')
-    memory.new_state_memory = np.loadtxt(fname="state_new.txt",dtype='int')
-    memory.action_memory = np.loadtxt(fname="action.txt",dtype='int')
-    memory.reward_memory = np.loadtxt(fname="reward.txt",dtype='int')
-    memory.terminal_memory = np.loadtxt(fname="terminal.txt",dtype='float')
-    memory.mem_cntr = cntr
-    return memory
-
-############################   
 
 class Snake():
 
@@ -392,36 +348,29 @@ class Snake():
 
 
 def main():
-    n_games = 51 
+    n_games = 21 
     game_records = [] 
     agent = Agent(gamma = 0.9, epsilon = 1.0, alpha = 0.0005, input_dims = 16,
                   n_actions = 3, mem_size = 100000, batch_size = 512, epsilon_end = 0.01)
-    #agent.load_model()
+
     #f = open("ajan.dat","rb")
     #agent = pickle.load(f)
     #f.close()
+
     scores = []
     t_ilk = time.time() 
     i=0
-    #print(t_end)
+
     for j in range(n_games):
         snake = Snake(10,10)
         done = False
         score = 0
         curr_state = snake.getState()
-##        f = open(str(j)+".txt","w")
-##        for satir in snake.board:
-##            f.write(str(satir))
-##            f.write("\n")
         game_record = []
         while not done:
             game_record.append(snake.board.copy())
             action = agent.choose_action(curr_state)
             eaten = snake.doStep(action)
-##            f.write("\n")
-##            for satir in snake.board:
-##                f.write(str(satir))
-##                f.write("\n")
             reward = 0
             if eaten:               
                 if snake.isDone:
@@ -439,20 +388,16 @@ def main():
             agent.remember(curr_state, action, reward, new_state, done)
             curr_state = new_state
             agent.learn()
-        #f.close()
 
         game_record.append(snake.board.copy())
         game_records.append(game_record.copy()) 
         scores.append(score)
 
         avg_score = np.mean(scores[0:i+1])
-        #if i%100 == 0:
         print('epsiode ', i, 'score %.2f' % score,'average score %.2f' %avg_score)
         i+=1
-        #print(time.time())
-        
-
-    t_son = time.time()
+    
+    
     f = open("ajan.obj","wb")
     pickle.dump(agent,f)
     f.close()
@@ -559,7 +504,3 @@ def main():
     quit()
 
 main()
-
-
-
-        
