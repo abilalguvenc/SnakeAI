@@ -346,20 +346,12 @@ class Snake():
         for i in range(self.row):
             print(self.board[i])
 
-
-def main():
-    n_games = 21 
-    game_records = [] 
+def agentfunc(n_games, game_records):
+    
+    i=0
+    scores = []
     agent = Agent(gamma = 0.9, epsilon = 1.0, alpha = 0.0005, input_dims = 16,
                   n_actions = 3, mem_size = 100000, batch_size = 512, epsilon_end = 0.01)
-
-    #f = open("ajan.dat","rb")
-    #agent = pickle.load(f)
-    #f.close()
-
-    scores = []
-    t_ilk = time.time() 
-    i=0
 
     for j in range(n_games):
         snake = Snake(10,10)
@@ -396,7 +388,19 @@ def main():
         avg_score = np.mean(scores[0:i+1])
         print('epsiode ', i, 'score %.2f' % score,'average score %.2f' %avg_score)
         i+=1
+    return agent
     
+def main():
+    n_games = 21 
+    game_records = [] 
+    
+    #f = open("ajan.dat","rb")
+    #agent = pickle.load(f)
+    #f.close()
+
+    t_ilk = time.time() 
+
+    agent = agentfunc(n_games, game_records)
     
     f = open("ajan.obj","wb")
     pickle.dump(agent,f)
