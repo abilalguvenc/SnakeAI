@@ -15,7 +15,9 @@ def get_image(path):
             _image_library[path] = image
     return image
 
-def trainAgent(agent, n_games, game_records):
+def trainAgent(n_games, game_records):
+    agent = Agent(gamma = 0.9, epsilon = 1.0, alpha = 0.0005, input_dims = 16,
+                  n_actions = 3, mem_size = 100000, batch_size = 512, epsilon_end = 0.01)
     scores = []
     i = 0
 
@@ -58,36 +60,36 @@ def trainAgent(agent, n_games, game_records):
         avg_score = np.mean(scores[0:i+1])
         print('Game %3d Score %3d\tAverage Score %.2f' %(i, score, avg_score))
         
-        if(score>(best_score-50)):
-            saveAgent(agent, "agents/tmp2.obj", True)
-            agenta=Agent(gamma = 0.9, epsilon = 1.0, alpha = 0.0005, input_dims = 16,
-                  n_actions = 3, mem_size = 100000, batch_size = 512, epsilon_end = 0.01)
-            loadAgent(agenta,"agents/tmp2.obj")
+        if(score>(best_score-50.5)):
             new_records = []
-            new_score_avg = agentPlay(agenta, new_records, 10, True)
+            new_score_avg = agentPlay(agent, new_records, 10, True)
             print("\tNew Record Avg:", new_score_avg)
             if(new_score_avg>best_score_avg):
                 best_records = new_records.copy()
                 best_score = score
                 best_score_avg = new_score_avg
-                saveAgent(agenta, "agents/tmp.obj", True)
+                saveAgent(agent, "agents/agent_"+str(n_games)+".obj", True)
         i+=1
     if(best_score != 149.5):
         for i in range(10):
-            game_records.append(best_records[i].copy()) 
-        loadAgent(agent, "agents/tmp.obj")
+            game_records.append(best_records[i].copy())
+    else:
+        saveAgent(agent, "agents/agent_"+str(n_games)+".obj", False)
     
-def saveAgent(agent, fileName, silent):
+def saveAgent(agent, fileName, tabbed):
     f = open(fileName, "wb")
-    pickle.dump(agent,f)
+    pickle.dump(agent,f,protocol=pickle.HIGHEST_PROTOCOL)
     f.close()
-    if not silent:
+    if not tabbed:
         print("\nAgent saved as \"%s\"" %fileName)
+    else:
+        print("\tAgent saved as \"%s\"" %fileName)
 
-def loadAgent(agent, fileName):
+def loadAgent(fileName):
     f = open(fileName, "rb")
     agent = pickle.load(f)
     f.close()
+    return agent
 
 def printAscendingScores(game_records):
     print("\n")
@@ -144,18 +146,15 @@ def agentPlay(agent, game_records, n_games, useTab):
 
 def main():
     game_records = [] 
-    agent = Agent(gamma = 0.9, epsilon = 1.0, alpha = 0.0005, input_dims = 16,
-                  n_actions = 3, mem_size = 100000, batch_size = 512, epsilon_end = 0.01)
 
     print("Select your choice\n1. Load Agent\n2. Train Agent")
     if(input("Choice: ") == "1"):
         agent_no = input("Select Agent ID: agent_")
-        loadAgent(agent, "agents/agent_"+agent_no+".obj")
-        agentPlay(agent, game_records, 100, False)
+        agent = loadAgent("agents/agent_"+agent_no+".obj")
+        agentPlay(agent, game_records, 51, False)
     else:
         n_games = int(input("Game Limit: "))
-        trainAgent(agent, n_games, game_records)
-        saveAgent(agent, "agents/agent_"+str(n_games)+".obj", False)
+        trainAgent(n_games, game_records)
     
     printAscendingScores(game_records)
     
