@@ -15,19 +15,9 @@ def get_image(path):
             _image_library[path] = image
     return image
 
-
-def main():
-    n_games = 51 
-    game_records = [] 
-    agent = Agent(gamma = 0.9, epsilon = 1.0, alpha = 0.0005, input_dims = 16,
-                  n_actions = 3, mem_size = 100000, batch_size = 512, epsilon_end = 0.01)
-
-    #f = open("ajan.dat","rb")
-    #agent = pickle.load(f)
-    #f.close()
-
+def trainAgent(agent, n_games, game_records):
     scores = []
-    i=0
+    i = 0
 
     for j in range(n_games):
         snake = Snake(10,10)
@@ -53,7 +43,7 @@ def main():
             else:
                 done = False
             score += reward
-            agent.remember(curr_state, action, reward, new_state, done)
+            agent.store(curr_state, action, reward, new_state, done)
             curr_state = new_state
             agent.learn()
 
@@ -62,14 +52,43 @@ def main():
         scores.append(score)
 
         avg_score = np.mean(scores[0:i+1])
-        print('epsiode ', i, 'score %.2f' % score,'average score %.2f' %avg_score)
+        print('Game %3d Score %3d\tAverage Score %.2f' %(i, score, avg_score))
         i+=1
     
-    
-    f = open("agents/agent_"+str(n_games)+".obj","wb")
+def saveAgent(agent, fileName):
+    f = open(fileName, "wb")
     pickle.dump(agent,f)
     f.close()
+    print("\nAgent saved as \"%s\"\n\n\n" %fileName)
+
+def loadAgent(agent, fileName):
+    f = open(fileName, "rb")
+    agent = pickle.load(f)
+    f.close()
+
+def main():
+    n_games = 21 
+    game_records = [] 
+    agent = Agent(gamma = 0.9, epsilon = 1.0, alpha = 0.0005, input_dims = 16,
+                  n_actions = 3, mem_size = 100000, batch_size = 512, epsilon_end = 0.01)
+
+    #loadAgent()
+
+    trainAgent(agent, n_games, game_records)
     
+    saveAgent(agent, "agents/agent_"+str(n_games)+".obj")
+    
+    
+    ###########################################################################################################
+    
+    hi_score = -1
+    for i in range(n_games):
+        new_score = np.max(game_records[i][len(game_records[i])-1]) - 1
+        if (hi_score < new_score):
+            hi_score = new_score
+            print("Game:%3d - Score: %d" %(i, hi_score))
+
+
     pygame.init()
     dis = pygame.display.set_mode((1050, 640))
     pygame.display.set_caption('Snake AI')
