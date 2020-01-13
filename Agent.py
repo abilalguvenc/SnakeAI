@@ -1,5 +1,6 @@
 import random
 import numpy as np
+import pickle
 from keras.layers import Dense, Activation,Dropout,Softmax
 from keras.models import Sequential, load_model
 from keras.optimizers import Adam
@@ -102,3 +103,18 @@ class Agent(object):
         
         self.epsilon = self.epsilon*self.epsilon_dec if self.epsilon > \
                        self.epsilon_min else self.epsilon_min
+
+def saveAgent(agent, fileName, tabbed):
+    f = open(fileName, "wb")
+    pickle.dump(agent,f,protocol=pickle.HIGHEST_PROTOCOL)
+    f.close()
+    if not tabbed:
+        print("\nAgent saved as \"%s\"" %fileName)
+    else:
+        print("\tAgent saved as \"%s\"" %fileName)
+
+def loadAgent(fileName):
+    f = open(fileName, "rb")
+    agent = pickle.load(f)
+    f.close()
+    return agent

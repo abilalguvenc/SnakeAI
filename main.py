@@ -3,7 +3,7 @@ import pickle
 import pygame
 import os
 from Snake import Snake
-from Agent import Agent
+from Agent import Agent, loadAgent, saveAgent
 
 _image_library = {}
 def get_image(path):
@@ -76,21 +76,6 @@ def trainAgent(n_games, game_records):
     else:
         saveAgent(agent, "agents/agent_"+str(n_games)+".obj", False)
     
-def saveAgent(agent, fileName, tabbed):
-    f = open(fileName, "wb")
-    pickle.dump(agent,f,protocol=pickle.HIGHEST_PROTOCOL)
-    f.close()
-    if not tabbed:
-        print("\nAgent saved as \"%s\"" %fileName)
-    else:
-        print("\tAgent saved as \"%s\"" %fileName)
-
-def loadAgent(fileName):
-    f = open(fileName, "rb")
-    agent = pickle.load(f)
-    f.close()
-    return agent
-
 def printAscendingScores(game_records):
     print("\n")
     hi_score = -1
