@@ -19,6 +19,24 @@ pip install tensorflow
 pip install numpy
 pip install pygame
 ```
+After installing libraries type following lines to start your snake trainer.
+```
+### STARTING THE PROGRAM ###
+> python main.py  # opens SnakeAI project
+     Select your choice
+     1. Load Agent     
+     2. Train Agent    
+     Choice: 
+> 1/2             # type "1" to load agent or "2" to train new one
+
+### 1 - FOR LOADING AGENT ###
+     Select Agent ID: agent_
+> 5001            # type "61", "401" or "5001" to open saved agents
+
+### 2 - FOR TRAINING NEW AGENT ###
+     Game Limit: 
+> 51              # type limit game number to train agent (start training with 50)
+```
 
 ### Game GUI
 ![](https://raw.githubusercontent.com/bilalguvenc/SnakeAI/master/images/snakeai_gameplay4.png)
@@ -31,9 +49,6 @@ pip install pygame
 ## Art
 The famous painting "Kaplumbağa Terbiyecisi" (Turtle Trainer) of Mr. Osman Hamdi was used to add visual power to the project.
 
-| Kaplumbağa Terbiyecisi (1907) | My Creation of Art |
-| ------------ | ------------ |
-| ![](https://github.com/bilalguvenc/SnakeAI/blob/master/images/poster_original.jpg?raw=true) | ![](https://github.com/bilalguvenc/SnakeAI/blob/master/images/snakeai_poster.png?raw=true) |
-
+![](https://github.com/bilalguvenc/SnakeAI/blob/master/images/poster_transform.PNG?raw=true) 
 
 
