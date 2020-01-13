@@ -49,6 +49,6 @@ After installing libraries type following lines to start your snake trainer.
 ## Art
 The famous painting "Kaplumbağa Terbiyecisi" (Turtle Trainer) of Mr. Osman Hamdi was used to add visual power to the project.
 
-![](https://github.com/bilalguvenc/SnakeAI/blob/master/images/poster_transform.PNG?raw=true) 
+![](https://raw.githubusercontent.com/bilalguvenc/SnakeAI/master/images/poster_transform.png) 
 
 
