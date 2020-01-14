@@ -90,7 +90,7 @@ def printAscendingScores(game_records):
         if (hi_score < new_score):
             hi_score = new_score
             print("Game:%3d - Score: %d" %(i, hi_score))
-    #print("Standard Derivative:", statistics.stdev(game_score))
+    print("Standard Deviation:", statistics.stdev(game_score))
     plt.plot(game_id, game_score) 
     plt.xlabel('Game') 
     plt.ylabel('Score') 
