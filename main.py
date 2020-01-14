@@ -1,10 +1,11 @@
 import numpy as np
-import pickle
 import pygame
 import os
 from Snake import Snake
 from Agent import Agent, loadAgent, saveAgent
-
+import matplotlib.pyplot as plt 
+import statistics
+  
 _image_library = {}
 def get_image(path):
     global _image_library
@@ -20,8 +21,7 @@ def trainAgent(n_games, game_records):
                   n_actions = 3, mem_size = 100000, batch_size = 512, epsilon_end = 0.01)
     scores = []
     i = 0
-
-    best_score = 149.5
+    best_score = 15
     best_score_avg = 0
     best_records = []
 
@@ -40,15 +40,17 @@ def trainAgent(n_games, game_records):
                 if snake.isDone:
                     reward = 1000
                 else:
+                    score += 1
                     reward = 10
             if snake.isDead:
                 reward = -10
+                if(snake.isCaged()): 
+                    reward = -1
             new_state = snake.getState()
             if snake.isDead or snake.isDone:
                 done = True
             else:
                 done = False
-            score += reward
             agent.store(curr_state, action, reward, new_state, done)
             curr_state = new_state
             agent.learn()
@@ -60,7 +62,7 @@ def trainAgent(n_games, game_records):
         avg_score = np.mean(scores[0:i+1])
         print('Game %3d Score %3d\tAverage Score %.2f' %(i, score, avg_score))
         
-        if(score>(best_score-50.5)):
+        if(score>(best_score-6)):
             new_records = []
             new_score_avg = agentPlay(agent, new_records, 10, True)
             print("\tNew Record Avg:", new_score_avg)
@@ -78,12 +80,23 @@ def trainAgent(n_games, game_records):
     
 def printAscendingScores(game_records):
     print("\n")
-    hi_score = -1
+    hi_score, score_sum = -1, 0
+    game_id, game_score = [], []
     for i in range(len(game_records)):
         new_score = np.max(game_records[i][len(game_records[i])-1]) - 1
+        game_id.append(i)
+        game_score.append(new_score)
+        score_sum += new_score
         if (hi_score < new_score):
             hi_score = new_score
             print("Game:%3d - Score: %d" %(i, hi_score))
+    #print("Standard Derivative:", statistics.stdev(game_score))
+    plt.plot(game_id, game_score) 
+    plt.xlabel('Game') 
+    plt.ylabel('Score') 
+    plt.title('Average Score: %.2f' %(score_sum/len(game_records)))
+    plt.show() 
+    
 
 def agentPlay(agent, game_records, n_games, useTab):
     scores = []
@@ -99,23 +112,18 @@ def agentPlay(agent, game_records, n_games, useTab):
             game_record.append(snake.board.copy())
             action = agent.choose_action(curr_state)
             eaten = snake.doStep(action)
-            reward = 0
             if eaten:               
                 if snake.isDone:
-                    reward = 1000
+                    score = 1000
                 else:
-                    reward = 10
-            if snake.isDead:
-                reward = -10
+                    score += 1
+                
             new_state = snake.getState()
             if snake.isDead or snake.isDone:
                 done = True
             else:
                 done = False
-            score += reward
-            agent.store(curr_state, action, reward, new_state, done)
             curr_state = new_state
-            #agent.learn()
 
         game_record.append(snake.board.copy())
         game_records.append(game_record.copy()) 
@@ -140,7 +148,7 @@ def main():
     else:
         n_games = int(input("Game Limit: "))
         trainAgent(n_games, game_records)
-    
+        
     printAscendingScores(game_records)
     
     ###########################################################################################################

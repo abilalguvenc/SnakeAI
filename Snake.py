@@ -203,6 +203,21 @@ class Snake():
         vector.append((self.col - self.head_y)/self.col)
         return np.asarray(vector)
 
+    def isCaged(self):
+        if(self.head_x>0):
+            up = self.board[self.head_x -1][self.head_y]
+            if (up == 0 or up == -1): return False
+        if(self.head_x<self.row-1):
+            down = self.board[self.head_x +1][self.head_y]
+            if (down == 0 or down == -1): return False
+        if(self.head_y>0):
+            left = self.board[self.head_x][self.head_y-1]
+            if (left == 0 or left == -1): return False
+        if(self.head_y<self.col-1):
+            right = self.board[self.head_x][self.head_y+1]
+            if (right == 0 or right == -1): return False
+        return True
+
     def printBoard(self):
         for i in range(self.row):
             print(self.board[i])
