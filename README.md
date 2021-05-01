@@ -39,16 +39,16 @@ After installing libraries type following lines to start your snake trainer.
 ```
 
 ### Game GUI
-![](https://raw.githubusercontent.com/bilalguvenc/SnakeAI/master/images/snakeai_gameplay4.png)
+![](https://raw.githubusercontent.com/abilalguvenc/SnakeAI/master/images/snakeai_gameplay4.png)
 
 ### Examples
 | Generation 48 | Generation 192 |
 | ------------ | ------------ |
-| ![](https://github.com/bilalguvenc/SnakeAI/blob/master/images/snakeai_gif_gen47.gif?raw=true) | ![](https://github.com/bilalguvenc/SnakeAI/blob/master/images/snakeai_gif_gen118.gif?raw=true) |
+| ![](https://github.com/abilalguvenc/SnakeAI/blob/master/images/snakeai_gif_gen47.gif?raw=true) | ![](https://github.com/abilalguvenc/SnakeAI/blob/master/images/snakeai_gif_gen118.gif?raw=true) |
 
 ## Art
 The famous painting "Kaplumbağa Terbiyecisi" (Turtle Trainer) of Mr. Osman Hamdi was used to add visual power to the project.
 
-![](https://raw.githubusercontent.com/bilalguvenc/SnakeAI/master/images/poster_transform.png) 
+![](https://raw.githubusercontent.com/abilalguvenc/SnakeAI/master/images/poster_transform.png) 
 
 
